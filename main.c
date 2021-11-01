@@ -1,134 +1,71 @@
 /*
- * Projekt.c
+ * Sound.c
  *
- * Created: 26/10/2021 13:22:31
- * Author : Frederik
+ * Created: 29/10/2021 16:47:53
+ * Author : jakob og ham frederik har også hjulpet
  */ 
 
-#include <avr/io.h>
-#include <stdlib.h>
-#define	F_CPU 16000000
-#include <util/delay.h>
-#include <stdint.h>
 
-void SendInteger(uint64_t Tal);
-void SendString(char *Streng);
-void SendChar(char tegn);
-void command();
 
-struct somoMessages
-{
-	unsigned char start;
-	unsigned char cmd;
-	unsigned char feedback;
-	unsigned char para1;
-	unsigned char para2;
-	unsigned char checksum1;
-	unsigned char checksum2;
-	unsigned char end;
-} SomoMsg;
+
+#include "Speaker.h"
+
+int baudRate = 9600;
+int outputState = 0;
 
 int main(void)
 {
-	//int i = 0;
-	//int hejsa[8] = {0xEF, 0xEF, 0xFF, 0x01, 0x01, 0x00, 0x0F, 0x7E};
+		
+	unsigned char startSound[ARRAYSIZE+1] = {0x7E,0x0F,0x01,0x01,0x01,0xFF,0xEE,0xEF};		//Startlyden ligger i mappe 01, er fil 001. "7E 0F 00 01 01 FF EF EF".
+	unsigned char reflexSound[ARRAYSIZE+1] = {0x7E,0x0F,0x00,0x01,0x02,0xFF,0xEE,0xEF};		//Reflexlyden ligger i mappe 01, er fil 002. "7E 0F 00 01 02 FF EF EF".
+	unsigned char finishSound[ARRAYSIZE+1] = {0x7E,0x0F,0x00,0x01,0x03,0xFF,0xED,0xEF};		//Færdiglyden ligger i mappe 01, er fil 003. "7E 0F 00 01 03 FF EF EF".
+	unsigned char stop[ARRAYSIZE+1] = {0x7E,0x16,0x00,0x00,0x00,0xFF,0xEA,0xEF};		//Stopkommando. Stopper afspilning af fil. "7E 16 00 00 00 FF EA EF"
+	unsigned char volMax[ARRAYSIZE+1] = {0x7E,0x06,0x00,0x00,0x1E,0xFF,0xDC,0xEF};		//Volume max. "7E 06 00 00 1E FF DC EF"
+
+	PrepareComms(baudRate);         //Klargør kommunikation med SOMO-II. Baudrate inputtes, OG ANDET ????
+	SendCommand(volMax);			//Sender volMax kommando
 
 
-
-		
-		
-		UBRR2 = 103;//F_CPU/(16*9600) - 1;
-		UCSR2B = 0b00011000;
-		UCSR2C = 0b00000110;
-		
-		SomoMsg.start = 0x7E;
-		SomoMsg.cmd = 0x06;
-		SomoMsg.feedback = 0x00;
-		SomoMsg.para1 = 0x00;
-		SomoMsg.para2 = 0x1E;
-		SomoMsg.checksum1 = 0xFF;
-		SomoMsg.checksum2 = 0xDC;
-		SomoMsg.end = 0xEF;
-		
-		
-		command();
-		
-		SomoMsg.start = 0x7E;
-		SomoMsg.cmd = 0x01;
-		SomoMsg.feedback = 0x00;
-		SomoMsg.para1 = 0x00;
-		SomoMsg.para2 = 0x00;
-		SomoMsg.checksum1 = 0xFF;
-		SomoMsg.checksum2 = 0xFF;
-		SomoMsg.end = 0xEF;
-		
-		//Det er som om nogle af bytesne er vendt om. F.eks. 0x0F ligner 0xF0 i waveforms
-		
-		while(1)
+	while(1)
+	{	
+		if ((PINA & 1) == 0)
 		{
-			command();
-			for (int i = 0; i < 10000000000000000; i++)
-			{
-				UDR2 = 0x00;
-			}
-			
-			
+			outputState = STARTOUT;
+		}
+		else if ((PINA & 1<<1) == 0)
+		{
+			outputState = REFLEXOUT;
+		}
+		else if ((PINA & 1<<2) == 0)
+		{
+			outputState = FINISHOUT;
+		}
+		else if ((PINA & 1<<3) == 0)
+		{
+			outputState = STOPOUT;
+		}
+		else
+		{
+			outputState = 0;
 		}
 		
-		
-}
-
-
-void command()
-{
-	while((UCSR2A & 0b00100000)==0)		//Venter pÃ¥ at data registeret er tomt
-	{}
-	UDR2 = SomoMsg.start;
-	while((UCSR2A & 0b00100000)==0)		//Venter pÃ¥ at data registeret er tomt
-	{}
-	UDR2 = SomoMsg.cmd;
-	while((UCSR2A & 0b00100000)==0)		//Venter pÃ¥ at data registeret er tomt
-	{}
-	UDR2 = (unsigned char)SomoMsg.feedback;
-	while((UCSR2A & 0b00100000)==0)		//Venter pÃ¥ at data registeret er tomt
-	{}
-	UDR2 = SomoMsg.para1;
-	while((UCSR2A & 0b00100000)==0)		//Venter pÃ¥ at data registeret er tomt
-	{}
-	UDR2 = SomoMsg.para2;
-	while((UCSR2A & 0b00100000)==0)		//Venter pÃ¥ at data registeret er tomt
-	{}
-	UDR2 = SomoMsg.checksum1;
-	while((UCSR2A & 0b00100000)==0)		//Venter pÃ¥ at data registeret er tomt
-	{}
-	UDR2 = SomoMsg.checksum2;
-	while((UCSR2A & 0b00100000)==0)		//Venter pÃ¥ at data registeret er tomt
-	{}
-	UDR2 = SomoMsg.end;
-}
-
-void SendInteger(uint64_t Tal)
-{
-	char talarray[16];
-	itoa(Tal,talarray,16);
-	SendString(talarray);
-	
-}
-
-
-void SendString(char *Streng)
-{
-	while(*Streng != 0)
-	{
-		SendChar(*Streng);
-		Streng++;
+		switch (outputState)     //Send kommando alt efter outputState. Hvis det ikke matcher cases, bruges default.
+		{
+			case STARTOUT:
+				SendCommand(startSound);
+				break;
+			case REFLEXOUT:
+				SendCommand(reflexSound);
+				break;
+			case FINISHOUT:
+				SendCommand(finishSound);
+				break;
+			case STOPOUT:
+				SendCommand(stop);
+				break;
+			default:
+				UDR2 = 0;      // SPAM output med nuller, hvis en kommando ikke skal sendes. Så kommer der ikke støj.
+		}
 	}
-	
 }
 
-
-void SendChar(char tegn)
-{
-	_delay_ms(50);
-	UDR2 = tegn;
-}
