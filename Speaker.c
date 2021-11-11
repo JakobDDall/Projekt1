@@ -14,7 +14,7 @@
 void testSpeaker()
 {
 	int outputState;
-	
+
 	if ((PINA & 1) == 0)
 		{
 			outputState = STARTOUT;
