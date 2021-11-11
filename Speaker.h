@@ -9,6 +9,11 @@
 #ifndef HEADER_H_
 #define HEADER_H_
 
+
+//CPU frekvens
+#define	F_CPU 16000000
+
+
 //Libraries
 #include <avr/io.h>
 #include <stdlib.h>
@@ -22,8 +27,7 @@
 #define FINISHOUT 3
 #define STOPOUT 4
 
-//CPU frekvens
-#define	F_CPU 16000000
+
 
 //Arraysize af kommandoer
 #define ARRAYSIZE 8
