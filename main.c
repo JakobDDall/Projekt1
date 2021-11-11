@@ -14,8 +14,8 @@
 
 int main(void)
 {
-	PrepareComms(baudRate);         //Klarg�r kommunikation med SOMO-II. Baudrate inputtes, OG ANDET ????
-				//Sender volMax kommando
+	PrepareComms();         //Klarg�r kommunikation med SOMO-II.
+	
 	while(1)
 	{	
 		testSpeaker();
