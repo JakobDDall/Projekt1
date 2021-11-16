@@ -30,7 +30,7 @@
 
 
 
-void PrepareComms();
+void initUART();
 void SendCommand(unsigned char command[]);
 void testSpeaker();
 

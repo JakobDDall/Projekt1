@@ -67,7 +67,7 @@ void testSpeaker()
 
 
 
-void PrepareComms()
+void initUART()
 {
 	UBRR2 = F_CPU/(16*(long int)9600) - 1; // S�t baud rate af output
 	UCSR2B = 0b00011000;

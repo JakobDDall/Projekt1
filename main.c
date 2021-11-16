@@ -14,7 +14,7 @@
 
 int main(void)
 {
-	PrepareComms();         //Klarg�r kommunikation med SOMO-II.
+	initUART();         //Klarg�r kommunikation med SOMO-II.
 	
 	while(1)
 	{	
