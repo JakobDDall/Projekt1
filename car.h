@@ -8,7 +8,8 @@
 #include "lights.h"
 #include "Motordriver.h"
 #include "Speaker.h"
-
+#include "reflex.h"
+#include "led.h"
 
 #ifndef CAR_H_
 #define CAR_H_
@@ -18,9 +19,11 @@
 #define BACKWARD_SPEED -100
 
 
-void startCar(void);
-void n50msTimer(void);
-void reflexReactions(int nReflex);
 
+
+void initCar(void);
+void startCar(void);
+void reflexReactions(int nReflex);
+void n50msTimer(void);
 
 #endif /* CAR_H_ */

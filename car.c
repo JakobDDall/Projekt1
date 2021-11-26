@@ -12,6 +12,36 @@
 #include <avr/io.h>
 
 
+
+void initCar(void)
+{
+		sei();
+		//-------------------------------------------- Initialisering --------------------------------------------
+		
+		//---------------Lyd-----------
+		initUART();
+		
+		//--------------Motor----------
+		initEngine();
+		
+		//---------------Lys-----------
+		
+		
+		//--------------Refleks-----------
+		initReflex();
+		
+		//-------------50msTimer----------
+		n50msTimer();
+		
+		// ---------MEGA2560 LEDs---------
+		initLEDport();
+		
+		//--------PORTA as input--------
+		DDRA = 0;
+}
+
+
+
 void startCar(void) 
 {
 		while ((PINA & 1) != 0)		//Bliv her indtil indtil knap 0 trykkes
@@ -19,34 +49,34 @@ void startCar(void)
 			UDR2 = 0;				//Sender LOW til SOMO-II. Forhindrer støj/kliklyde. Måske findes et andet fix?
 		}
 		//_delay_ms(5000);
-		EngineControl(FORWARD_SPEED);			//Start motor. Max speed
+		engineControl(FORWARD_SPEED);			//Start motor. Max speed
 		//K?RELYS
-		StartLyd();
+		startSound();
 }
 
 void reflexReactions(int nReflex)		//Hvordan bilen skal reagere på reflekser
 {
 	if(nReflex == 6)
 	{
-		EngineControl(BACKWARD_SPEED); //Bak
+		engineControl(BACKWARD_SPEED); //Bak
 		//BAKLYS
-		RefleksLyd();
+		reflexSound();
 	}
 	else if(nReflex == 8)
 	{
-		EngineControl(FORWARD_SPEED); //Frem
+		engineControl(FORWARD_SPEED); //Frem
 		//K?RELYS
-		RefleksLyd();
+		reflexSound();
 	}
 	else if(nReflex == 11)
 	{
-		EngineControl(0); //Stop
+		engineControl(0); //Stop
 		//SLUK LYS
-		SlutLyd();
+		finishSound();
 	}
 	else if(nReflex > 0)
 	{
-		RefleksLyd();
+		reflexSound();
 	}
 }
 

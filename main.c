@@ -5,12 +5,7 @@
  * Author : jakob
  */ 
 
-
-#include "reflex.h"
-#include "led.h"
-//Her mangler lights
 #include "car.h"
-
 //Globale varable
 volatile int reflexCount = 0;		//Antal passerede reflekser. Styrer bilens opførsel
 volatile int n50ms = 0;				//Antallet af 50ms sekunder passeret siden start af timer
@@ -20,31 +15,8 @@ volatile int lastReflex = -10;		//Variabel til at gemme hvornår sidste refleks b
 #define REFLEX_DELAY 6 // Ganges med 50. Antal millisekunder, hvor ny refleks ikke man måles.
 int main(void)
 {
-	sei();
-    //-------------------------------------------- Initialisering --------------------------------------------
-	
-	//---------------Lyd-----------
-	initUART();
-	
-	//--------------Motor----------
-	InitEngine();
-	
-	//---------------Lys-----------
-	
-	
-	//--------------Refleks-----------
-	initRefleks();
-	
-	//-------------50msTimer----------
-	n50msTimer();
-	
-	// ---------MEGA2560 LEDs---------
-	initLEDport();
-	
-	//--------PORTA as input--------
-	DDRA = 0;
-	
-	
+	// ------------------------ Initialize ---------------------------
+	initCar();
 	// ------------------------ Start bil -----------------------------
 	startCar();
 	// -------------------------------------- Main program loop ---------------------------------------------
@@ -55,12 +27,8 @@ int main(void)
 			turnOnLED(7);
 		else
 			turnOffLED(7);
-	
 	}
-	
 }
-
-
 
 ISR(INT0_vect)	//REFLEX1 interrupt rutine. Kommandoer kun hvis tid siden sidste refleks > 500ms 
 {
@@ -76,6 +44,3 @@ ISR(TIMER4_COMPA_vect)			//50msTimer tæller op ved compare match
 {
 	n50ms++;
 }
-
-
-
