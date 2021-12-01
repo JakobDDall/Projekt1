@@ -5,5 +5,5 @@
  *  Author: Nephim
  */ 
 
-void InitEngine(void);
-void EngineControl(int Speed);
+void initEngine(void);
+void engineControl(int Speed);

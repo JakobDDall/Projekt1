@@ -33,11 +33,11 @@
 #define ARRAYSIZE 8
 
 void initUART();
-void SendCommand(unsigned char command[]);
+void sendCommand(unsigned char command[]);
 //void testSpeaker();
-void StartLyd();
-void RefleksLyd();
-void SlutLyd();
+void startLyd();
+void refleksLyd();
+void slutLyd();
 
 
 

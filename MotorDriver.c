@@ -7,7 +7,7 @@
 
 #include <avr/io.h>
 
-void InitEngine(void){
+void initEngine(void){
 	DDRB = 0xFF; //port B as output
 	PORTB = 0; //clear
 	TCCR1A = 0b10100011; //PIN A og PIN B
@@ -16,7 +16,7 @@ void InitEngine(void){
 }
 
 
-void EngineControl(int Speed){
+void engineControl(int Speed){
 	
 	if(Speed > 0){
 		OCR1B = 0;
