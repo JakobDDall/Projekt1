@@ -6,8 +6,8 @@
  */ 
 
 #include "lights.h"
-#include "Motordriver.h"
-#include "Speaker.h"
+#include "motordriver.h"
+#include "speaker.h"
 #include "reflex.h"
 #include "led.h"
 

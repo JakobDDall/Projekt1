@@ -36,21 +36,21 @@ void sendCommand(unsigned char command[])
 }
 
 
-void startLyd()
+void startSound()
 {
 	unsigned char startSound[ARRAYSIZE+1] = {0x7E,0x0F,0x01,0x01,0x01,0xFF,0xEE,0xEF};		//Startlyden ligger i mappe 01, er fil 001. "7E 0F 00 01 01 FF EF EF".
 	sendCommand(startSound);
 }
 
 
-void refleksLyd()
+void reflexSound()
 {
 	unsigned char reflexSound[ARRAYSIZE+1] = {0x7E,0x0F,0x00,0x01,0x02,0xFF,0xEE,0xEF};		//Reflexlyden ligger i mappe 01, er fil 002. "7E 0F 00 01 02 FF EF EF".
 	sendCommand(reflexSound);
 }
 
 
-void slutLyd()
+void finishSound()
 {
 	unsigned char finishSound[ARRAYSIZE+1] = {0x7E,0x0F,0x00,0x01,0x03,0xFF,0xED,0xEF};		//F�rdiglyden ligger i mappe 01, er fil 003. "7E 0F 00 01 03 FF EF EF".
 	sendCommand(finishSound);

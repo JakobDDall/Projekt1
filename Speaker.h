@@ -34,10 +34,9 @@
 
 void initUART();
 void sendCommand(unsigned char command[]);
-//void testSpeaker();
-void startLyd();
-void refleksLyd();
-void slutLyd();
+void startSound();
+void reflexSound();
+void finishSound();
 
 
 

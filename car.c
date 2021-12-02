@@ -6,7 +6,6 @@
  */ 
 #include "car.h"
 
-#define ACC_DELAY 5000
 
 #define F_CPU 16000000
 #include <util/delay.h>
@@ -29,7 +28,7 @@ void initCar(void)
 		
 		
 		//--------------Refleks-----------
-		initRefleks();
+		initReflex();
 		
 		//-------------50msTimer----------
 		n50msTimer();
@@ -49,65 +48,35 @@ void startCar(void)
 		{
 			UDR2 = 0;				//Sender LOW til SOMO-II. Forhindrer støj/kliklyde. Måske findes et andet fix?
 		}
-		//_delay_ms(500);
-		for (int i = 50; i <= 100; i++){
-			engineControl(i);
-			_delay_us(ACC_DELAY + 1000);
-		}
-		//engineControl(FORWARD_SPEED);			//Start motor. Max speed
+		//_delay_ms(5000);
+		engineControl(FORWARD_SPEED);			//Start motor. Max speed
 		//K?RELYS
-		startLyd();
+		startSound();
 }
 
 void reflexReactions(int nReflex)		//Hvordan bilen skal reagere på reflekser
 {
 	if(nReflex == 6)
 	{
-		//engineControl(BACKWARD_SPEED); //Bak
-			for (int i = 100; i >= 50; i--){
-				engineControl(i);
-				_delay_us(ACC_DELAY);
-			}
-			engineControl(0);
-			_delay_us(ACC_DELAY*5);
-			for (int i = 50; i <= 100; i++){
-				engineControl(-i);
-				_delay_us(ACC_DELAY);
-			}
+		engineControl(BACKWARD_SPEED); //Bak
 		//BAKLYS
-		refleksLyd();
+		reflexSound();
 	}
 	else if(nReflex == 8)
 	{
-		//engineControl(FORWARD_SPEED); //Frem
-		for (int i = 100; i >= 50; i--){
-			engineControl(-i);
-			_delay_us(ACC_DELAY);
-		}
-		engineControl(0);
-		_delay_us(ACC_DELAY*5);
-		for (int i = 50; i <= 100; i++){
-			engineControl(i);
-			_delay_us(ACC_DELAY);
-		}
+		engineControl(FORWARD_SPEED); //Frem
 		//K?RELYS
-		refleksLyd();
+		reflexSound();
 	}
 	else if(nReflex == 11)
 	{
-		for (int i = 100; i >= 50; i--){
-			engineControl(i);
-			_delay_us(ACC_DELAY);
-		}
-		engineControl(0);
-		
-		//engineControl(0); //Stop
+		engineControl(0); //Stop
 		//SLUK LYS
-		slutLyd();
+		finishSound();
 	}
 	else if(nReflex > 0)
 	{
-		refleksLyd();
+		reflexSound();
 	}
 }
 

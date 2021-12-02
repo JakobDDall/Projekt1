@@ -1,10 +1,10 @@
 #include "reflex.h"
 
-void initRefleks()
+void initReflex()
 {
-	// INT0 og INT1: rising edge
+	// INT0: rising edge
 	EICRA = 0b00000011;
-	// Enable extern interrupts INT0 og INT1
+	// Enable extern interrupts INT0
 	EIMSK = 0b00000001;
 	
 }

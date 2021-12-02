@@ -10,7 +10,7 @@
 #define REFLEX_H_
 
 
-void initRefleks();
+void initReflex();
 
 
 #endif /* REFLEX_H_ */

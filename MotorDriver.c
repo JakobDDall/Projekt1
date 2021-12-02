@@ -29,6 +29,4 @@ void engineControl(int Speed){
 		OCR1B = 0;
 	}
 	
-	
-
 }
