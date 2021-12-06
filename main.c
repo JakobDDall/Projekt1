@@ -2,11 +2,11 @@
  * Samlet_projekt.cpp
  *
  * Created: 22/11/2021 12:46:26
- * Author : jakob
+ * Author : Jakob, Anders og Frederik
  */ 
 
 #include "car.h"
-//Globale varable
+//Globale variable
 volatile int reflexCount = 0;		//Antal passerede reflekser. Styrer bilens opførsel
 volatile int n50ms = 0;				//Antallet af 50ms sekunder passeret siden start af timer
 volatile int lastReflex = -10;		//Variabel til at gemme hvornår sidste refleks blev passeret.

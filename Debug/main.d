@@ -1,5 +1,5 @@
-main.d main.o: .././main.c .././car.h .././lights.h .././Motordriver.h \
- .././Speaker.h \
+main.d main.o: .././main.c .././car.h .././lights.h .././motordriver.h \
+ .././speaker.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\inttypes.h \
@@ -24,9 +24,9 @@ main.d main.o: .././main.c .././car.h .././lights.h .././Motordriver.h \
 
 .././lights.h:
 
-.././Motordriver.h:
+.././motordriver.h:
 
-.././Speaker.h:
+.././speaker.h:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h:
 

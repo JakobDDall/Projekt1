@@ -1,11 +1,3 @@
-/*
- * header.h
- *
- * Created: 01/11/2021 09:44:02
- *  Author: jakob
- */ 
-
-
 #ifndef HEADER_H_
 #define HEADER_H_
 

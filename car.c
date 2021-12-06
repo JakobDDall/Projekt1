@@ -2,7 +2,7 @@
  * car.c
  *
  * Created: 25/11/2021 09:56:01
- *  Author: jakob
+ *  Author: Jakob og Frederik
  */ 
 #include "car.h"
 

@@ -1,10 +1,3 @@
-/*
- * car.h
- *
- * Created: 25/11/2021 09:55:54
- *  Author: jakob
- */ 
-
 #include "lights.h"
 #include "motordriver.h"
 #include "speaker.h"

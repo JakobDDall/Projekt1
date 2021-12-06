@@ -2,7 +2,7 @@
  * CFile1.c
  *
  * Created: 01/11/2021 12:28:24
- *  Author: jakob
+ *  Author: Jakob og Frederik
  */ 
 
 
