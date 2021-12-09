@@ -2,7 +2,7 @@
  * car.c
  *
  * Created: 25/11/2021 09:56:01
- *  Author: Jakob og Frederik
+ *  Author: Jakob and Frederik
  */ 
 #include "car.h"
 
@@ -16,18 +16,18 @@
 void initCar(void)
 {
 		sei();
-		//-------------------------------------------- Initialisering --------------------------------------------
+		//-------------------------------------------- Initialization --------------------------------------------
 		
-		//---------------Lyd-----------
+		//---------------Sound-----------
 		initUART();
 		
 		//--------------Motor----------
 		initEngine();
 		
-		//---------------Lys-----------
+		//---------------Light-----------
+		initLight();
 		
-		
-		//--------------Refleks-----------
+		//--------------Reflex-----------
 		initReflex();
 		
 		//-------------50msTimer----------
@@ -44,34 +44,36 @@ void initCar(void)
 
 void startCar(void) 
 {
-		while ((PINA & 1) != 0)		//Bliv her indtil indtil knap 0 trykkes
+		while ((PINA & 1) != 0)		//Stay until button is pressed
 		{
-			UDR2 = 0;				//Sender LOW til SOMO-II. Forhindrer støj/kliklyde. Måske findes et andet fix?
+			UDR2 = 0;				//Sens LOW to SOMO-II. Prevents noice/clicking sound. Maybe other fix?
 		}
 		//_delay_ms(5000);
 		engineControl(FORWARD_SPEED);			//Start motor. Max speed
-		//K?RELYS
+		frontLightState(FRONT_LIGHT_ON);
+		backLightState(BACK_LIGHT_NORMAL);
 		startSound();
 }
 
-void reflexReactions(int nReflex)		//Hvordan bilen skal reagere på reflekser
+void reflexReactions(int nReflex)		//How the car reacts on reflexes
 {
 	if(nReflex == 6)
 	{
-		engineControl(BACKWARD_SPEED); //Bak
-		//BAKLYS
+		engineControl(BACKWARD_SPEED); //Reverse
+		backLightState(BACK_LIGHT_BRAKE); //Brakelight
 		reflexSound();
 	}
 	else if(nReflex == 8)
 	{
-		engineControl(FORWARD_SPEED); //Frem
-		//K?RELYS
+		engineControl(FORWARD_SPEED); //Forward
+		initTimer500ms();	//Timer which overflows after 500ms. Used to keep brakelight turned on
 		reflexSound();
 	}
 	else if(nReflex == 11)
 	{
 		engineControl(0); //Stop
-		//SLUK LYS
+		backLightState(BACK_LIGHT_OFF); //
+		frontLightState(FRONT_LIGHT_OFF);
 		finishSound();
 	}
 	else if(nReflex > 0)
@@ -81,10 +83,10 @@ void reflexReactions(int nReflex)		//Hvordan bilen skal reagere på reflekser
 }
 
 
-void n50msTimer(void)	//Initialiser 50msTimer
+void n50msTimer(void)	//Initialize 50msTimer
 {
-	OCR4A = 49999;			//Passende compare value for et compare match hvert 50. ms, med prescaler på 8
-	TCCR4A = 0b00000000;	//bit 7-2: compare output mode for channel A-B-C. Her er alle disconnected. Bit 0-1 er bit 0 og 1 af waveform generation mode.
-	TCCR4B = 0b00001010;	//Bit 3-4 er bit 2 og 3 af waveform generation mode. Bit 0-2 sætter prescaler.
+	OCR4A = 49999;			//Appropriate compare value for a compare match every 50th ms, with prescaler on 8
+	TCCR4A = 0b00000000;	//bit 7-2: compare output mode for channel A-B-C. All are disconnected. Bit 0-1 are bit 0 and 1 of waveform generation mode.
+	TCCR4B = 0b00001010;	//Bit 3-4 are bit 2 and 3 of waveform generation mode. Bit 0-2 sets prescaler.
 	TIMSK4 = 0b00000010;	//Bit 1-3: Compare match interrupt enable.
 }

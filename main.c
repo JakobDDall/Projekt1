@@ -12,6 +12,7 @@ volatile int n50ms = 0;				//Antallet af 50ms sekunder passeret siden start af t
 volatile int lastReflex = -10;		//Variabel til at gemme hvornår sidste refleks blev passeret.
 
 
+
 #define REFLEX_DELAY 6 // Ganges med 50. Antal millisekunder, hvor ny refleks ikke man måles.
 int main(void)
 {
@@ -43,4 +44,10 @@ ISR(INT0_vect)	//REFLEX1 interrupt rutine. Kommandoer kun hvis tid siden sidste 
 ISR(TIMER4_COMPA_vect)			//50msTimer tæller op ved compare match
 {
 	n50ms++;
+}
+
+ISR(TIMER5_OVF_vect)		//500ms after 
+{
+	backLightState(BACK_LIGHT_NORMAL);
+	TCCR5B = 0x00; //Disable timer
 }

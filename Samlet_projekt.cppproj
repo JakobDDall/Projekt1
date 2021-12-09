@@ -168,10 +168,10 @@
     <Compile Include="led.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="lights.h">
+    <Compile Include="light.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="lights.c">
+    <Compile Include="light.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.c">

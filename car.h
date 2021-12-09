@@ -1,4 +1,4 @@
-#include "lights.h"
+#include "light.h"
 #include "motordriver.h"
 #include "speaker.h"
 #include "reflex.h"
@@ -10,6 +10,12 @@
 //Values
 #define FORWARD_SPEED 100
 #define BACKWARD_SPEED -100
+#define FRONT_LIGHT_OFF 0
+#define FRONT_LIGHT_ON 1
+#define BACK_LIGHT_OFF 0
+#define BACK_LIGHT_NORMAL 1
+#define BACK_LIGHT_BRAKE 2
+
 
 
 

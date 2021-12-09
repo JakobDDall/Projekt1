@@ -6,7 +6,7 @@ car.c
 
 led.c
 
-lights.c
+light.c
 
 main.c
 

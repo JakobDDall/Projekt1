@@ -39,7 +39,7 @@ SUBDIRS :=
 C_SRCS +=  \
 ../car.c \
 ../led.c \
-../lights.c \
+../light.c \
 ../main.c \
 ../MotorDriver.c \
 ../reflex.c \
@@ -55,7 +55,7 @@ ASM_SRCS +=
 OBJS +=  \
 car.o \
 led.o \
-lights.o \
+light.o \
 main.o \
 MotorDriver.o \
 reflex.o \
@@ -64,7 +64,7 @@ Speaker.o
 OBJS_AS_ARGS +=  \
 car.o \
 led.o \
-lights.o \
+light.o \
 main.o \
 MotorDriver.o \
 reflex.o \
@@ -73,7 +73,7 @@ Speaker.o
 C_DEPS +=  \
 car.d \
 led.d \
-lights.d \
+light.d \
 main.d \
 MotorDriver.d \
 reflex.d \
@@ -82,7 +82,7 @@ Speaker.d
 C_DEPS_AS_ARGS +=  \
 car.d \
 led.d \
-lights.d \
+light.d \
 main.d \
 MotorDriver.d \
 reflex.d \
@@ -116,7 +116,7 @@ LINKER_SCRIPT_DEP+=
 	@echo Finished building: $<
 	
 
-./lights.o: .././lights.c
+./light.o: .././light.c
 	@echo Building file: $<
 	@echo Invoking: AVR8/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -g2 -Wall -mmcu=atmega2560 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\gcc\dev\atmega2560" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
