@@ -4,7 +4,7 @@
 #define REFLEX_H_
 
 
-void initReflex();
+void initReflex(void);
 
 
 #endif /* REFLEX_H_ */

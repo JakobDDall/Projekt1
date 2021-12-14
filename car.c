@@ -72,7 +72,7 @@ void reflexReactions(int nReflex)		//How the car reacts on reflexes
 	else if(nReflex == 11)
 	{
 		engineControl(0); //Stop
-		backLightState(BACK_LIGHT_OFF); //
+		initTimer500ms(); //DOES NOT WORK AS INTENDED
 		frontLightState(FRONT_LIGHT_OFF);
 		finishSound();
 	}

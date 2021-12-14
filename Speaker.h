@@ -1,5 +1,5 @@
-#ifndef HEADER_H_
-#define HEADER_H_
+#ifndef SPEAKER_H_
+#define SPEAKER_H_
 
 
 //CPU frekvens
@@ -24,12 +24,12 @@
 //Arraysize af kommandoer
 #define ARRAYSIZE 8
 
-void initUART();
+void initUART(void);
 void sendCommand(unsigned char command[]);
-void startSound();
-void reflexSound();
-void finishSound();
+void startSound(void);
+void reflexSound(void);
+void finishSound(void);
 
 
 
-#endif /* HEADER_H_ */
+#endif /* SPEAKER_H_ */

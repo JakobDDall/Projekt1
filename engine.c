@@ -16,15 +16,15 @@ void initEngine(void){
 }
 
 
-void engineControl(int Speed){
+void engineControl(int speed){
 	
-	if(Speed > 0){
+	if(speed > 0){
 		OCR1B = 0;
-		OCR1A = (Speed * 10) + 23;
-	} else if (Speed < 0){
+		OCR1A = (speed * 10) + 23;
+	} else if (speed < 0){
 		OCR1A = 0;
-		OCR1B = (Speed * -10) + 23;
-	} else if (Speed == 0){
+		OCR1B = (speed * -10) + 23;
+	} else if (speed == 0){
 		OCR1A = 0;
 		OCR1B = 0;
 	}

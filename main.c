@@ -29,9 +29,11 @@ int main(void)
 		else
 			turnOffLED(7);
 	}
+	
+	return 0;
 }
 
-ISR(INT0_vect)	//REFLEX1 interrupt rutine. Kommandoer kun hvis tid siden sidste refleks > 500ms 
+ISR(INT4_vect)	//REFLEX1 interrupt rutine. Kommandoer kun hvis tid siden sidste refleks > 500ms 
 {
 	if(n50ms - lastReflex > REFLEX_DELAY)
 	{
@@ -48,6 +50,13 @@ ISR(TIMER4_COMPA_vect)			//50msTimer tæller op ved compare match
 
 ISR(TIMER5_OVF_vect)		//500ms after 
 {
-	backLightState(BACK_LIGHT_NORMAL);
+	if (reflexCount >= 8 || reflexCount <= 10)
+	{
+		backLightState(BACK_LIGHT_NORMAL);	
+	}
+	else if (reflexCount >= 11)
+	{
+		backLightState(BACK_LIGHT_OFF);
+	}
 	TCCR5B = 0x00; //Disable timer
 }

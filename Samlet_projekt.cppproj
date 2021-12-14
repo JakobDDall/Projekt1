@@ -177,10 +177,10 @@
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MotorDriver.c">
+    <Compile Include="engine.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Motordriver.h">
+    <Compile Include="engine.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="reflex.c">
@@ -189,10 +189,10 @@
     <Compile Include="reflex.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Speaker.c">
+    <Compile Include="speaker.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Speaker.h">
+    <Compile Include="speaker.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
