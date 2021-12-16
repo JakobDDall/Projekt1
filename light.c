@@ -52,10 +52,3 @@ void backLightState(unsigned char state)
 }
 
 
-void initTimer500ms(void)
-{
-	TCCR5A = 0b00000000; //Normal mode
-	TCCR5B = 0b000000100; //Normal mode, 256 prescaler
-	TCNT5 = 34286; //Overflow every 500ms
-	TIMSK5 = 0b00000001; //Enable overflow interrupt	
-}

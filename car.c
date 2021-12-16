@@ -48,11 +48,12 @@ void startCar(void)
 		{
 			UDR2 = 0;				//Sens LOW to SOMO-II. Prevents noice/clicking sound. Maybe other fix?
 		}
-		//_delay_ms(5000);
-		engineControl(FORWARD_SPEED);			//Start motor. Max speed
+					
 		frontLightState(FRONT_LIGHT_ON);
 		backLightState(BACK_LIGHT_NORMAL);
 		startSound();
+		_delay_ms(650);	//Delay for perfect match with the start sound
+		engineControl(FORWARD_SPEED); //Start motor. Max speed
 }
 
 void reflexReactions(int nReflex)		//How the car reacts on reflexes
@@ -66,13 +67,11 @@ void reflexReactions(int nReflex)		//How the car reacts on reflexes
 	else if(nReflex == 8)
 	{
 		engineControl(FORWARD_SPEED); //Forward
-		initTimer500ms();	//Timer which overflows after 500ms. Used to keep brakelight turned on
 		reflexSound();
 	}
 	else if(nReflex == 11)
 	{
 		engineControl(0); //Stop
-		initTimer500ms(); //DOES NOT WORK AS INTENDED
 		frontLightState(FRONT_LIGHT_OFF);
 		finishSound();
 	}

@@ -21,19 +21,35 @@ int main(void)
 	// ------------------------ Start bil -----------------------------
 	startCar();
 	// -------------------------------------- Main program loop ---------------------------------------------
+	
+	int currentTime = 0;	//Variable for keeping brakelights on for 500ms
 	while(1)
 	{
+		if(reflexCount == 8 && (n50ms - currentTime) > 10)	//Til test af reflexCount. Hvis lige antal lyser Led 7
+		{
+			currentTime = n50ms;
+		}
+		else if(reflexCount == 11 && (n50ms - currentTime) > 10)
+		{
+			currentTime = n50ms;
+		}
 		
-		if(reflexCount % 2 == 0)	//Til test af reflexCount. Hvis lige antal lyser Led 7
-			turnOnLED(7);
-		else
-			turnOffLED(7);
+		if((n50ms - currentTime) > 9 && reflexCount >= 8 && reflexCount <= 10)
+		{
+			backLightState(BACK_LIGHT_NORMAL);
+		}
+		else if((n50ms - currentTime) > 9 && reflexCount >= 11)
+		{
+			backLightState(BACK_LIGHT_OFF);
+		}
+		
+		
 	}
 	
 	return 0;
 }
 
-ISR(INT4_vect)	//REFLEX1 interrupt rutine. Kommandoer kun hvis tid siden sidste refleks > 500ms 
+ISR(INT5_vect)	//REFLEX1 interrupt rutine. Kommandoer kun hvis tid siden sidste refleks > 500ms 
 {
 	if(n50ms - lastReflex > REFLEX_DELAY)
 	{
@@ -46,17 +62,4 @@ ISR(INT4_vect)	//REFLEX1 interrupt rutine. Kommandoer kun hvis tid siden sidste 
 ISR(TIMER4_COMPA_vect)			//50msTimer tæller op ved compare match
 {
 	n50ms++;
-}
-
-ISR(TIMER5_OVF_vect)		//500ms after 
-{
-	if (reflexCount >= 8 || reflexCount <= 10)
-	{
-		backLightState(BACK_LIGHT_NORMAL);	
-	}
-	else if (reflexCount >= 11)
-	{
-		backLightState(BACK_LIGHT_OFF);
-	}
-	TCCR5B = 0x00; //Disable timer
 }
