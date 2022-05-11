@@ -1,134 +1,65 @@
 /*
- * Projekt.c
+ * Samlet_projekt.cpp
  *
- * Created: 26/10/2021 13:22:31
- * Author : Frederik
+ * Created: 22/11/2021 12:46:26
+ * Author : Jakob, Anders og Frederik
  */ 
 
-#include <avr/io.h>
-#include <stdlib.h>
-#define	F_CPU 16000000
-#include <util/delay.h>
-#include <stdint.h>
+#include "car.h"
+//Globale variable
+volatile int reflexCount = 0;		//Antal passerede reflekser. Styrer bilens opførsel
+volatile int n50ms = 0;				//Antallet af 50ms sekunder passeret siden start af timer
+volatile int lastReflex = -10;		//Variabel til at gemme hvornår sidste refleks blev passeret.
 
-void SendInteger(uint64_t Tal);
-void SendString(char *Streng);
-void SendChar(char tegn);
-void command();
 
-struct somoMessages
-{
-	unsigned char start;
-	unsigned char cmd;
-	unsigned char feedback;
-	unsigned char para1;
-	unsigned char para2;
-	unsigned char checksum1;
-	unsigned char checksum2;
-	unsigned char end;
-} SomoMsg;
 
+#define REFLEX_DELAY 6 // Ganges med 50. Antal millisekunder, hvor ny refleks ikke man måles.
 int main(void)
 {
-	//int i = 0;
-	//int hejsa[8] = {0xEF, 0xEF, 0xFF, 0x01, 0x01, 0x00, 0x0F, 0x7E};
-
-
-
-		
-		
-		UBRR2 = 103;//F_CPU/(16*9600) - 1;
-		UCSR2B = 0b00011000;
-		UCSR2C = 0b00000110;
-		
-		SomoMsg.start = 0x7E;
-		SomoMsg.cmd = 0x06;
-		SomoMsg.feedback = 0x00;
-		SomoMsg.para1 = 0x00;
-		SomoMsg.para2 = 0x1E;
-		SomoMsg.checksum1 = 0xFF;
-		SomoMsg.checksum2 = 0xDC;
-		SomoMsg.end = 0xEF;
-		
-		
-		command();
-		
-		SomoMsg.start = 0x7E;
-		SomoMsg.cmd = 0x01;
-		SomoMsg.feedback = 0x00;
-		SomoMsg.para1 = 0x00;
-		SomoMsg.para2 = 0x00;
-		SomoMsg.checksum1 = 0xFF;
-		SomoMsg.checksum2 = 0xFF;
-		SomoMsg.end = 0xEF;
-		
-		//Det er som om nogle af bytesne er vendt om. F.eks. 0x0F ligner 0xF0 i waveforms
-		
-		while(1)
+	// ------------------------ Initialize ---------------------------
+	initCar();
+	// ------------------------ Start bil -----------------------------
+	startCar();
+	// -------------------------------------- Main program loop ---------------------------------------------
+	
+	int currentTime = 0;	//Variable for keeping brakelights on for 500ms
+	while(1)
+	{
+		if(reflexCount == 8 && (n50ms - currentTime) > 10)	//Til test af reflexCount. Hvis lige antal lyser Led 7
 		{
-			command();
-			for (int i = 0; i < 10000000000000000; i++)
-			{
-				UDR2 = 0x00;
-			}
-			
-			
+			currentTime = n50ms;
+		}
+		else if(reflexCount == 11 && (n50ms - currentTime) > 10)
+		{
+			currentTime = n50ms;
+		}
+		
+		if((n50ms - currentTime) > 9 && reflexCount >= 8 && reflexCount <= 10)
+		{
+			backLightState(BACK_LIGHT_NORMAL);
+		}
+		else if((n50ms - currentTime) > 9 && reflexCount >= 11)
+		{
+			backLightState(BACK_LIGHT_OFF);
 		}
 		
 		
-}
-
-
-void command()
-{
-	while((UCSR2A & 0b00100000)==0)		//Venter pÃ¥ at data registeret er tomt
-	{}
-	UDR2 = SomoMsg.start;
-	while((UCSR2A & 0b00100000)==0)		//Venter pÃ¥ at data registeret er tomt
-	{}
-	UDR2 = SomoMsg.cmd;
-	while((UCSR2A & 0b00100000)==0)		//Venter pÃ¥ at data registeret er tomt
-	{}
-	UDR2 = (unsigned char)SomoMsg.feedback;
-	while((UCSR2A & 0b00100000)==0)		//Venter pÃ¥ at data registeret er tomt
-	{}
-	UDR2 = SomoMsg.para1;
-	while((UCSR2A & 0b00100000)==0)		//Venter pÃ¥ at data registeret er tomt
-	{}
-	UDR2 = SomoMsg.para2;
-	while((UCSR2A & 0b00100000)==0)		//Venter pÃ¥ at data registeret er tomt
-	{}
-	UDR2 = SomoMsg.checksum1;
-	while((UCSR2A & 0b00100000)==0)		//Venter pÃ¥ at data registeret er tomt
-	{}
-	UDR2 = SomoMsg.checksum2;
-	while((UCSR2A & 0b00100000)==0)		//Venter pÃ¥ at data registeret er tomt
-	{}
-	UDR2 = SomoMsg.end;
-}
-
-void SendInteger(uint64_t Tal)
-{
-	char talarray[16];
-	itoa(Tal,talarray,16);
-	SendString(talarray);
-	
-}
-
-
-void SendString(char *Streng)
-{
-	while(*Streng != 0)
-	{
-		SendChar(*Streng);
-		Streng++;
 	}
 	
+	return 0;
 }
 
-
-void SendChar(char tegn)
+ISR(INT5_vect)	//REFLEX1 interrupt rutine. Kommandoer kun hvis tid siden sidste refleks > 500ms 
 {
-	_delay_ms(50);
-	UDR2 = tegn;
+	if(n50ms - lastReflex > REFLEX_DELAY)
+	{
+		lastReflex = n50ms; //Gem tiden
+		reflexCount++;		//Increment counter
+		reflexReactions(reflexCount);	//Få bilen til at reagere
+	}
+}
+
+ISR(TIMER4_COMPA_vect)			//50msTimer tæller op ved compare match
+{
+	n50ms++;
 }
